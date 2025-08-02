@@ -2,6 +2,9 @@
 
 import type { JSX } from "react"
 import { motion } from "framer-motion"
+import Skills from "@/components/Skill"
+import ReviewsList from "@/components/ReviewList"
+import Projects from "@/components/Projects"
 
 function HomePage(): JSX.Element {
   return (
@@ -24,6 +27,11 @@ function HomePage(): JSX.Element {
           Innovation Lab
         </motion.h2>
       </div>
+      <Projects />
+      <div className="w-full my-16 border-t border-gray-700/50" />
+      <Skills />
+      <div className="w-full my-16 border-t border-gray-700/50" />
+      <ReviewsList />
     </main>
   )
 }

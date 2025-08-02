@@ -20,9 +20,12 @@ type WalletContextType = {
 const WalletContext = createContext<WalletContextType | undefined>(undefined)
 
 interface Eip1193Provider {
-  request: (args: { method: string, params?: unknown[] }) => Promise<unknown>
+  request: (args: { method: string; params?: unknown[] }) => Promise<unknown>
   on: (eventName: string, listener: (...args: unknown[]) => void) => void
-  removeListener: (eventName: string, listener: (...args: unknown[]) => void) => void
+  removeListener: (
+    eventName: string,
+    listener: (...args: unknown[]) => void
+  ) => void
 }
 
 declare global {
@@ -31,7 +34,11 @@ declare global {
   }
 }
 
-export function WalletProvider({ children }: { children: ReactNode }): JSX.Element {
+export function WalletProvider({
+  children,
+}: {
+  children: ReactNode
+}): JSX.Element {
   const [account, setAccount] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -49,7 +56,10 @@ export function WalletProvider({ children }: { children: ReactNode }): JSX.Eleme
       const provider = new ethers.BrowserProvider(
         window.ethereum as ethers.Eip1193Provider
       )
-      const account = await provider.send("eth_requestAccounts", []) as string
+      const account = (await provider.send(
+        "eth_requestAccounts",
+        []
+      )) as string
 
       if (account.length > 0) {
         setAccount(account[0])
@@ -67,7 +77,11 @@ export function WalletProvider({ children }: { children: ReactNode }): JSX.Eleme
 
   useEffect(() => {
     function handleAccountsChanged(accounts: unknown): void {
-      if (Array.isArray(accounts) && accounts.length > 0 && typeof accounts[0] === 'string') {
+      if (
+        Array.isArray(accounts) &&
+        accounts.length > 0 &&
+        typeof accounts[0] === "string"
+      ) {
         setAccount(accounts[0])
       } else {
         setAccount(null)
@@ -88,9 +102,7 @@ export function WalletProvider({ children }: { children: ReactNode }): JSX.Eleme
   const value = { account, connectWallet, isLoading, error }
 
   return (
-    <WalletContext.Provider value={value}>
-      {children}
-    </WalletContext.Provider>
+    <WalletContext.Provider value={value}>{children}</WalletContext.Provider>
   )
 }
 
